@@ -11,20 +11,24 @@ blogRoot = blogRoot.endsWith("/") ? blogRoot : blogRoot + '/';
 /** 默认配置 */
 const defaultConfig = {
   // 日志是否启用
-  'log': true
+  'log': true,
+  // 是否使用jsDelivr加速
+  'jsdelivr': null
 };
 
 // Apply options with default
 let config = _.defaultsDeep({}, hexo.config.filter_image, hexo.theme.config.filter_image, defaultConfig);
 
 /** 获取图片绝对路径 */
-function urlForHelper(path = '/') {
-  if (path[0] === '#' || path.startsWith('//') || path.startsWith(blogRoot)) {
+function urlForHelper (path = '/') {
+  if (path[0] === '#' || path.startsWith('//') || path.startsWith(blogRoot) || path.startsWith(config.jsdelivr)) {
     return path;
   }
 
   // Prepend path
-  path = blogRoot + path;
+  if (config.jsdelivr != null) {
+    path = config.jsdelivr + path;
+  } else path = blogRoot + path;
 
   // path.replace(/\/{2,}/g, '/');
   return path.replace(/(\\|\/){2,}/g, '/');
@@ -53,7 +57,7 @@ hexo.extend.filter.register('after_post_render', function (data) {
         // For windows style path, we replace '\' to '/'.
         var src = $(this).attr('src').replace('\\', '/');
         if (!(/http[s]*.*|\/\/.*/.test(src) ||
-            /^\s+\//.test(src))) {
+          /^\s+\//.test(src))) {
           /* || /^\s*\/uploads|images\//.test(src) */
           $(this).attr('src', urlForHelper(src));
           if (config.log) {

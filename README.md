@@ -37,6 +37,8 @@ npm install hexo-filter-image --save
 filter_image:
   # 日志是否启用
   log: true
+  # 是否使用jsdelivr加速
+  jsdelivr: null
 ```
 
 # Example
