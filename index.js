@@ -27,11 +27,13 @@ function urlForHelper (path = '/') {
 
   // Prepend path
   if (config.jsdelivr != null) {
+    path = path.replace(/\.{2,}/g, '.').replace(/\/{2,}/g, '/');
     path = config.jsdelivr + path;
-  } else path = blogRoot + path;
+  } else {
+    path = (blogRoot + path).replace(/\/{2,}/g, '/');
+  }
 
-  // path.replace(/\/{2,}/g, '/');
-  return path.replace(/(\\|\/){2,}/g, '/');
+  return path;
 }
 
 /** 在文章渲染完成后执行 */
