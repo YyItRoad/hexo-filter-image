@@ -54,7 +54,7 @@ hexo.extend.filter.register('after_post_render', function (data) {
       decodeEntities: false
     });
 
-    $('img').each(function () {
+    $('img,video').each(function () {
       if ($(this).attr('src')) {
         // For windows style path, we replace '\' to '/'.
         var src = $(this).attr('src').replace('\\', '/');
